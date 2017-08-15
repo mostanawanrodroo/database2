@@ -51,7 +51,10 @@ DHT11
 
 ความคิดสร้างสรรค์
 
-เปิด - ปิด หลอด LED ผ่าน Firebase
+เมื่อความชื้นมากกว่า 85 หลอดLEDจะเปล่งแสงออกมาเตือน
+
+และเมื่อความชื้นกลับมาต่ำกว่า85หลอดLEDก็จะดับ
+
 วิธีการต่อขาหลอดLED
 
 ![alttext](https://github.com/jokermarkk/Database/blob/master/%E0%B8%AB%E0%B8%A5%E0%B8%AD%E0%B8%94%E0%B9%84%E0%B8%9F.jpg)
