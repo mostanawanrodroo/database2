@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=TIS-620">
+    <title>DTH11</title>
+    <?php  
+        $conn = mysqli_connect("localhost", "root", "0873606477", "dear");
+        $temp = $_GET["temp"];
+        $humi = $_GET["humi"];
+        $heat = $_GET["heat"];
+        $sql = "INSERT INTO esp8266 (temp, humi, heat) VALUES ($temp, $humi, $heat)";
+        $query = $conn->query($sql);
+    ?>
+    <script type="text/javascript" src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
+    <script type="text/javascript" src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js?cacheBust=56"></script>
+    <script type="text/javascript">
+      FusionCharts.ready(function(){
+        var fusioncharts = new FusionCharts({
+        type: 'thermometer',
+        renderAt: 'chart-container',
+        id: 'myThm-1',
+        width: '240',
+        height: '300',
+        dataFormat: 'json',
+        dataSource: {
+            "chart": {
+                "caption": "Temperature Monitor",
+                //"subcaption": " temperature gauge",
+                "lowerLimit": "-10",
+                "upperLimit": "100",
+                "numberSuffix": "?C",
+                "decimals": "1",
+                "showhovereffect": "1",
+                "thmFillColor": "#008ee4",
+                "showGaugeBorder": "1",
+                "gaugeBorderColor": "#008ee4",
+                "gaugeBorderThickness": "1",
+                "gaugeBorderAlpha": "30",
+                "thmOriginX": "100",
+                "bgColor": "#F5F5F5",
+                "theme": "fint"
+            },
+            "value": "0",
+            "annotations": {
+                "showbelow": "0",
+                "groups": [{
+                    "id": "indicator",
+                    "items": [
+                        {
+                            "id": "background",
+                            "type": "rectangle",
+                            "alpha": "50",
+                            "fillColor": "#AABBCC",
+                            "x": "$gaugeEndX-40",
+                            "tox": "$gaugeEndX",
+                            "y": "$gaugeEndY+54",
+                            "toy": "$gaugeEndY+72"
+                        }
+                    ]
+                }]
+
+            },
+        },
+            "events": {
+            "rendered": function(evtObj) {
+                <?php
+                $sql = "SELECT * FROM esp8266 order by timeon DESC";
+                $query = $conn->query($sql);
+                $row = $query->fetch_assoc();
+                ?>
+                    evtObj.sender.feedData("&value=" + <?php echo $row['temp'] ?>);
+            },
+                "disposed": function(evtObj) {
+                clearInterval(evt.sender.dataUpdate);
+            }
+        }
+        
+    }
+    );
+        fusioncharts.render();
+    });
+    </script>
+
+</head>
+<body>
+<table align="center" border="0" width="100%" height="100%" background="image/bg2.png">
+<tr align="center">
+    <td>
+            <img src = "image/don.png">
+            <img src = "image/hon.png">
+            <img src = "image/ton.png">
+    </td>
+</tr>
+<tr align="center">
+    <td>
+    <font face="TH Krub" size="5"><h2>อุณหภูมิ ณ เวลานี้</h2></font>
+    <font face="Comic Sans MS" color="#FF3300" size="3">
+    <h2>
+        <?php
+            $sql = "SELECT * FROM esp8266 order by timeon DESC";
+            $query = $conn->query($sql);
+            $row = $query->fetch_assoc();
+            echo "Temp : ".$row['temp']." &deg;C &nbsp; Humi : ".$row['humi']." &deg;C &nbsp; Heat : ".$row['heat']." &deg;F &nbsp; <br>".$row['timeon']."<br>";
+        ?>
+    </h2></font>
+    </td>
+</tr>
+<tr>
+    <td align="center">
+    <div id="chart-container"></div>
+    </td>
+</tr>
+</table>
+</body>
+   <META HTTP-EQUIV='Refresh' CONTENT = '50;URL=index.php'>
+</html>

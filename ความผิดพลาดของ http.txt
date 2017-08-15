@@ -1,0 +1,18 @@
+<?php
+        $dbconn = mysqli_connect('localhost','root','0873606477','dear') or die ('Connect Fail'. mysqli_connect_erro
+r());
+        mysqli_set_charset($dbconn,'utf8');
+        $temp1 = $_GET['dhtok'];
+        $temp2 = $_GET['dhterrer'];
+        $query = "INSERT INTO dhtok(DHTOK,DHTERRER) VALUE ('$temp1','$temp2')";
+        $result = mysqli_query($dbconn,$query);
+        if($result){
+                echo 'à¾Á¢ÍÁÅàÃÂºÃÍÂáÅÇ !';
+        } else {
+                echo 'à¡´¢Í¼´¾ÅÒ´ã¹¡ÒÃà¾Á¢ÍÁÅ !';
+        }
+                mysqli_close($dbconn);
+?>
+~
+~                                                                                                                  
+~          
